@@ -33,74 +33,207 @@ public void bt() throws IOException, InterruptedException {
 	Runtime.getRuntime().exec("taskkill /F /IM node.exe");
 	Thread.sleep(5000);
 }
-
-@Test
-public void testcase4() throws InterruptedException, IOException {
-	
-	service=startserver();
-	driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
-	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-	driver.findElement(By.id("com.androidsample.generalstore:id/nameField")).sendKeys("Anand");
-	
-	driver.findElement(By.xpath("//*[@text='Female']")).click();
-	driver.findElement(By.id("android:id/text1")).click();
-	driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Australia\"))").click();
-	driver.findElement(MobileBy.id("com.androidsample.generalstore:id/btnLetsShop")).click();
-
-	driver.findElements(By.xpath("//*[@text='ADD TO CART']")).get(0).click();
-	driver.findElements(By.xpath("//*[@text='ADD TO CART']")).get(0).click();	
-	driver.findElement(By.id("com.androidsample.generalstore:id/appbar_btn_cart")).click();
-	Thread.sleep(3000);
-    String amount1 = driver.findElements(By.id("com.androidsample.generalstore:id/productPrice")).get(0).getText();
-    amount1 = amount1.substring(1);
-    double amount1value = Double.parseDouble(amount1);
-    
-    
-    String amount2 = driver.findElements(By.id("com.androidsample.generalstore:id/productPrice")).get(1).getText();
-    amount2 = amount2.substring(1);
-    double amount2value = Double.parseDouble(amount2);
-    
-    //Sum of the amount of first two product
-    double TotalAmount = amount1value + amount2value;
-    
-    //Final one
-    String finalamount = driver.findElement(By.id("com.androidsample.generalstore:id/totalAmountLbl")).getText();
-    finalamount = finalamount.substring(1);
-    double FinalTotal = Double.parseDouble(finalamount);
-    
-    Assert.assertEquals(FinalTotal, TotalAmount);
-    //tap on checkbox
-    //longpress on please read terms and condition
-    //popup where i have to click on ok button
-    //then i have to click on visit to website to complete purchase
-    
-    AndroidElement checkbox = driver.findElement(By.className("android.widget.CheckBox"));
-    TouchAction t = new TouchAction(driver);
-    t.tap(tapOptions().withElement(element(checkbox))).perform();
-    AndroidElement terms =driver.findElement(By.xpath("//*[@text='Please read our terms of conditions']"));
-    t.longPress(longPressOptions().withElement(element(terms)).withDuration(ofSeconds(3))).release().perform();
-    System.out.println(driver.findElement(By.id("android:id/message")).getText());
-    driver.findElement(By.xpath("//*[@text='CLOSE']")).click();
-    driver.findElement(By.id("com.androidsample.generalstore:id/btnProceed")).click();
-    Thread.sleep(8000);
- 
-    //to shift from native to web
-    
-    Set<String> contextNames = driver.getContextHandles();
-    for (String contextName : contextNames) {
-        System.out.println(contextName); //prints out something like NATIVE_APP \n WEBVIEW_1
-    }
-    driver.context("WEBVIEW_com.androidsample.generalstore");
-    Thread.sleep(5000);
-    driver.findElement(By.xpath("//*[@name='q']")).sendKeys("IBM");
-    driver.findElement(By.xpath("//*[@name='q']")).sendKeys(Keys.ENTER);
-    Thread.sleep(3000);
-    
-    driver.pressKey(new KeyEvent(AndroidKey.BACK));	
-    driver.context("NATIVE_APP");
-    service.stop();
-    
-    //
+	@Test() 
+    public void signinandverify() throws IOException, Exception {
+		service=startserver();
+		driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	//driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	//Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+     	//driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.TextView")).click();    //driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+  	    driver.findElementByAccessibilityId("Enter an e-mail address or username").sendKeys("anandmb@gmail.com");
+    	driver.hideKeyboard();
+    	driver.findElementByAccessibilityId("Password").sendKeys("anand@khan123");
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Sign in\"]/android.widget.TextView")).click();
+    	
+    	boolean joinclass=driver.findElement(By.xpath("//*[@text='Join class']")).isDisplayed();
+    	
+    	if(joinclass=true) {
+    		System.out.println("User is logged in"); 
+    	} 
+    	else
+    		System.out.println("User is not logged in");
+    	
+    	driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign out']")).click();
+    	driver.findElement(By.xpath("//*[@text='SIGN OUT']")).click();
+    	System.out.println("User logged out");
+    	Thread.sleep(3000);
  }
-
-}
+    
+     
+    @Test(enabled=false) 
+    public void joiningClass() throws IOException, Exception {
+    	
+    	service=startserver();
+		driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+     	//driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.TextView")).click();    //driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+  	    driver.findElementByAccessibilityId("Enter an e-mail address or username").sendKeys("anandmb@gmail.com");
+    	driver.hideKeyboard();
+    	driver.findElementByAccessibilityId("Password").sendKeys("anand@khan123");
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Sign in\"]/android.widget.TextView")).click();
+    	driver.findElement(By.xpath("//*[@text='Join class']")).click();
+    	driver.findElementByAccessibilityId("e.g. ABC123 or teacher@example.com").sendKeys("abc@gmail.com");
+    	Thread.sleep(2000);
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//*[@text='ADD']")).click();
+    	driver.findElement(By.xpath("//*[@text='ADD']")).click();
+    	//driver.findElement(By.className("android.widget.Button")).click();
+    	driver.findElement(By.xpath("//*[@text='DISMISS']")).click();
+    	
+    	driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	driver.findElementByAndroidUIAutomator("text(\"Manage teachers\")").click();
+    	boolean deleteButton=driver.findElementByAccessibilityId("Delete").isDisplayed();
+        if(deleteButton=true)
+        	System.out.println("User joined the class");
+        else
+      
+        	System.out.println("User not joined the class");
+       Thread.sleep(3000); 
+       
+    } 
+    
+    @Test(enabled=false) 
+    public void manageTeacherandremove() throws IOException, Exception {
+    	
+    	service=startserver();
+		driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	
+    	//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	//driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	//Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+     	//driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.TextView")).click();    //driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+  	    driver.findElementByAccessibilityId("Enter an e-mail address or username").sendKeys("anandmb@gmail.com");
+    	driver.hideKeyboard();
+    	driver.findElementByAccessibilityId("Password").sendKeys("anand@khan123");
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Sign in\"]/android.widget.TextView")).click();
+    	driver.findElement(By.xpath("//*[@text='Join class']")).click();
+    	driver.findElementByAccessibilityId("e.g. ABC123 or teacher@example.com").sendKeys("abc@gmail.com");
+    	Thread.sleep(2000);
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//*[@text='ADD']")).click();
+    	driver.findElement(By.xpath("//*[@text='ADD']")).click();
+    	//driver.findElement(By.className("android.widget.Button")).click();
+    	driver.findElement(By.xpath("//*[@text='DISMISS']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	driver.findElementByAndroidUIAutomator("text(\"Manage teachers\")").click();
+    	
+    	driver.findElementByAccessibilityId("Delete").click();
+    	driver.findElementByAndroidUIAutomator("text(\"REMOVE\")").click();
+    	
+    	boolean noTeacher=driver.findElementByAndroidUIAutomator("text(\"No teachers\")").isDisplayed();
+    	if(noTeacher=true)
+    	    {
+    		System.out.println("Added Teacher name has been removed");
+    	    }
+    	else
+    		System.out.println("Teacher name is not removed");
+   
+     driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.ImageView")).click();
+     driver.findElementByAndroidUIAutomator("text(\"Sign out\")").click();
+     driver.findElementByAndroidUIAutomator("text(\"SIGN OUT\")").click();
+     System.out.println("User logged out");
+     Thread.sleep(2000);
+ 	
+    }
+   
+    @Test(enabled=false) 
+    public void khanacademyforKids() throws IOException, Exception {
+    	service=startserver();
+		driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	//driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	//Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+     	//driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.TextView")).click();    //driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+  	    driver.findElementByAccessibilityId("Enter an e-mail address or username").sendKeys("anandmb@gmail.com");
+    	driver.hideKeyboard();
+    	driver.findElementByAccessibilityId("Password").sendKeys("anand@khan123");
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Sign in\"]/android.widget.TextView")).click();
+    	Thread.sleep(2000);
+    	//driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Get our free, award-winning app for kids ages 2-7.\"))").click();
+    
+    	//JavascriptExecutor js1=(JavascriptExecutor)driver;
+     	//WebElement tillEnd=driver.findElement(By.xpath("//*[@text='Get our free, award-winning app for kids ages 2-7.']"));
+  	    //js1.executeScript("arguments[0].scrollIntoView(true)", tillEnd);
+    	
+    }
+    	
+    
+    
+    @Test(enabled=false) 
+    public void termsandconditions() throws IOException, Exception {
+    	service=startserver();
+		driver=capability(appPackage,appActivity,deviceName,chromedriverExecutable);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	
+    	//driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	//driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	//Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+     	//driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Dismiss\"]/android.widget.TextView")).click();    //driver.findElement(By.xpath("//*[@text='Dismiss']")).click();
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+    	Thread.sleep(3000);
+    	driver.findElement(By.xpath("//*[@text='Sign in']")).click();
+  	    driver.findElementByAccessibilityId("Enter an e-mail address or username").sendKeys("anandmb@gmail.com");
+    	driver.hideKeyboard();
+    	driver.findElementByAccessibilityId("Password").sendKeys("anand@khan123");
+    	driver.hideKeyboard();
+    	driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Sign in\"]/android.widget.TextView")).click();
+    	
+    	driver.findElement(By.xpath("//android.widget.ImageView[@content-desc=\"Settings\"]")).click();
+    	driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Terms of service\"))").click();
+    	
+    	driver.findElement(By.id("android:id/button_once")).click();
+    	
+    	Set<String> contextNames = driver.getContextHandles();
+        for (String contextName : contextNames) {
+            System.out.println(contextName); 
+        }
+        driver.context("WEBVIEW_org.khanacademy.android");
+    	
+    	boolean terms=driver.findElement(By.xpath("//*[@text='Khan Academy Terms of Service']")).isDisplayed();
+        if(terms=true)
+        	System.out.println("Khan Academy Terms of Service is displayed");
+        else
+        	System.out.println("Khan Academy Terms of Service is not displayed");
+        
+        driver.close();
+        
+    }
+    
+}	

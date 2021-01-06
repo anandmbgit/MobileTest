@@ -5,7 +5,8 @@
     <classes>
       <class name="Practise.AppiumFramework.TC_01">
         <methods>
-          <include name="testcase4"/>
+          <include name="joiningClass"/>
+          <include name="manageTeacherandremove"/>
           <include name="bt"/>
         </methods>
       </class> <!-- Practise.AppiumFramework.TC_01 -->
